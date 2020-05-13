@@ -1,48 +1,34 @@
 package com.sorclab.boxremote.endpoint.rest;
 
-import com.sorclab.boxremote.exception.InternalServerError;
-import com.sorclab.boxremote.util.LinuxUtils;
+import com.sorclab.boxremote.model.DirectoryDTO;
+import com.sorclab.boxremote.service.DiskService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
-// TODO: Logs are completely silent. 500 w/ "Command failed" prints 0 stack traces--proper status is returned to client
-
 @RestController
+@Slf4j
+@RequiredArgsConstructor
 public class DiskController
 {
+    private final DiskService diskService;
+
     @GetMapping(value = "/disk/space")
-    public List<String> getDiskSpace()
-    {
-        try {
-            return LinuxUtils.shellExec(new String[]{"df", "-h"});
-        } catch (IOException e) {
-            throw new InternalServerError("Command failed", e);
-        }
+    public List<String> getDiskSpace() {
+        return diskService.getDiskSpace();
     }
 
     @GetMapping(value = "/disk/io")
-    public List<String> getDiskIO()
-    {
-        try {
-            //return LinuxUtils.shellExec(new String[]{"top", "-n 1", "-b"});
-            return LinuxUtils.shellExec(new String[]{"iostat"});
-        } catch (IOException e) {
-            throw new InternalServerError("Command failed", e);
-        }
+    public List<String> getDiskIO() {
+        return diskService.getDiskIO();
     }
 
-    @GetMapping(value = "/disk/dirsize")
-    public List<String> getDirSize()
-    {
-        try {
-            return LinuxUtils.shellExec(new String[]{"cd", "/var", "&&", "sudo", "du", "-shc", "."});
-            //return LinuxUtils.shellExec(new String[]{"ls"});
-        } catch (IOException e) {
-            e.printStackTrace(); // TODO: Remove after fix to below issue
-            throw new InternalServerError("Command failed", e); // TODO: Why is this swallowing the stack trace?
-        }
+    @GetMapping(value = "/disk/dirstat")
+    public List<String> getDirStat(@RequestBody DirectoryDTO directoryDTO) {
+        return diskService.getDirStat(directoryDTO);
     }
 }
