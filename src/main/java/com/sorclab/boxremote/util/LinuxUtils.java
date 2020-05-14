@@ -1,18 +1,21 @@
 package com.sorclab.boxremote.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class LinuxUtils
 {
-    public static List<String> shellExec(String[] cmd) throws IOException {
+    public List<String> shellExec(String[] cmd) throws IOException {
         return getProcessResult(createProcess(cmd));
     }
 
-    private static Process createProcess(String[] cmd) throws IOException
+    private Process createProcess(String[] cmd) throws IOException
     {
         ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         processBuilder.redirectErrorStream(true);
@@ -20,7 +23,7 @@ public class LinuxUtils
         return processBuilder.start();
     }
 
-    private static List<String> getProcessResult(Process process) throws IOException
+    private List<String> getProcessResult(Process process) throws IOException
     {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         List<String> result = new ArrayList<>();
