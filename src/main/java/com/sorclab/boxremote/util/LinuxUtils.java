@@ -1,5 +1,6 @@
 package com.sorclab.boxremote.util;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -9,18 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class LinuxUtils
 {
+    private final ProcessUtils processUtils;
+
     public List<String> shellExec(String[] cmd) throws IOException {
-        return getProcessResult(createProcess(cmd));
-    }
-
-    private Process createProcess(String[] cmd) throws IOException
-    {
-        ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-        processBuilder.redirectErrorStream(true);
-
-        return processBuilder.start();
+        return getProcessResult(processUtils.createProcess(cmd));
     }
 
     private List<String> getProcessResult(Process process) throws IOException
