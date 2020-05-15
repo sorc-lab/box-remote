@@ -1,6 +1,5 @@
 package com.sorclab.boxremote.service;
 
-import com.sorclab.boxremote.model.DirectoryDTO;
 import com.sorclab.boxremote.util.LinuxUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,11 +86,11 @@ public class DiskServiceTest
     public void getDirStat_Success() throws Exception
     {
         // Arrange
-        DirectoryDTO directoryDTO = DirectoryDTO.builder().directory("/path/to/dir").build();
+        String path = "/path/to/dir";
         when(linuxUtils.shellExec(any(String[].class))).thenReturn(Collections.emptyList());
 
         // Act
-        diskService.getDirStat(directoryDTO);
+        diskService.getDirStat(path);
 
         // Assert
         verify(linuxUtils, atMostOnce()).shellExec(argCaptor.capture());
@@ -99,16 +98,16 @@ public class DiskServiceTest
         assertThat(argCaptor.getValue()[0]).isEqualTo("/bin/sh");
         assertThat(argCaptor.getValue()[1]).isEqualTo("-c");
         assertThat(argCaptor.getValue()[2])
-                .isEqualTo(String.format("cd %s; ~/.cargo/bin/sn l", directoryDTO.getDirectory()));
+                .isEqualTo(String.format("cd %s; ~/.cargo/bin/sn l", path));
     }
 
     @Test
     public void getDirStat_CmdFail_ThrowsResponseStatusException() throws IOException
     {
-        DirectoryDTO directoryDTO = DirectoryDTO.builder().directory("/path/to/dir").build();
+        String path = "/path/to/dir";
         when(linuxUtils.shellExec(any(String[].class))).thenThrow(IOException.class);
 
-        assertThatThrownBy(() -> diskService.getDirStat(directoryDTO))
+        assertThatThrownBy(() -> diskService.getDirStat(path))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Command failed");
     }

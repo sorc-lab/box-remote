@@ -10,7 +10,6 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

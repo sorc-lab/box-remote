@@ -1,11 +1,10 @@
 package com.sorclab.boxremote.endpoint.rest;
 
-import com.sorclab.boxremote.model.DirectoryDTO;
 import com.sorclab.boxremote.service.DiskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class DiskController
     }
 
     @GetMapping(value = "/disk/dirstat")
-    public List<String> getDirStat(@RequestBody DirectoryDTO directoryDTO) {
-        return diskService.getDirStat(directoryDTO);
+    public List<String> getDirStat(@RequestParam(name = "path") String path) {
+        return diskService.getDirStat(path);
     }
 }

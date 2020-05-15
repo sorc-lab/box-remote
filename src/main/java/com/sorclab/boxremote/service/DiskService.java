@@ -1,6 +1,5 @@
 package com.sorclab.boxremote.service;
 
-import com.sorclab.boxremote.model.DirectoryDTO;
 import com.sorclab.boxremote.util.LinuxUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +41,7 @@ public class DiskService
         }
     }
 
-    public List<String> getDirStat(DirectoryDTO directoryDTO)
+    public List<String> getDirStat(String path)
     {
         try {
             // TODO: $ curl -sf -L https://static.rust-lang.org/rustup.sh | sh
@@ -56,7 +55,7 @@ public class DiskService
             return linuxUtils.shellExec(new String[] {
                     "/bin/sh",
                     "-c",
-                    String.format("cd %s; ~/.cargo/bin/sn l", directoryDTO.getDirectory())
+                    String.format("cd %s; ~/.cargo/bin/sn l", path)
             });
         }
         catch (IOException e)
