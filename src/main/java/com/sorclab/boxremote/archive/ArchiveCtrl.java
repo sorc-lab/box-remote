@@ -71,6 +71,7 @@ public class ArchiveCtrl
         {
             paths.filter(path -> !Files.isDirectory(path)).forEach(path -> {
                 ZipEntry zipEntry = new ZipEntry(sourceDirPath.relativize(path).toString());
+                System.out.println(sourceDirPath.relativize(path).toString());
 
                 try {
                     zipOutputStream.putNextEntry(zipEntry);
