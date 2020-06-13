@@ -1,4 +1,4 @@
-package com.sorclab.boxremote.service;
+package com.sorclab.boxremote.disk;
 
 import com.sorclab.boxremote.util.LinuxUtils;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,13 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DiskService
+class DiskSvc
 {
     private static final String CMD_FAIL = "Command failed";
 
     private final LinuxUtils linuxUtils;
 
-    public List<String> getDiskSpace()
+    List<String> getDiskSpace()
     {
         try {
             return linuxUtils.shellExec(new String[]{"df", "-h"});
@@ -29,7 +29,7 @@ public class DiskService
         }
     }
 
-    public List<String> getDiskIO()
+    List<String> getDiskIo()
     {
         try {
             //return LinuxUtils.shellExec(new String[]{"top", "-n 1", "-b"});
@@ -41,7 +41,7 @@ public class DiskService
         }
     }
 
-    public List<String> getDirStat(String path)
+    List<String> getDirStat(String path)
     {
         try {
             // TODO: $ curl -sf -L https://static.rust-lang.org/rustup.sh | sh
