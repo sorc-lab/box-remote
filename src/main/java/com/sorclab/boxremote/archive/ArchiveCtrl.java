@@ -30,9 +30,9 @@ public class ArchiveCtrl
         // https://stackoverflow.com/questions/46668418/microservice-return-response-first-and-then-process-the-request
         // TODO: Run zip in separate thread and return 200 status w/ content zip target
 
-        // TODO: Email user when finished
-
         zip(src, target);
+
+        // TODO: Copy zip to archive targets and email user on completion. Also do in separate thread
 
         return target; // TODO: Rename these vars?
     }
@@ -64,22 +64,23 @@ public class ArchiveCtrl
     private void zip(String srcDirPath, String targetDirPath) throws IOException
     {
         Path zipFile = Files.createFile(Paths.get(targetDirPath));
-
         Path sourceDirPath = Paths.get(srcDirPath);
+
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(zipFile));
-             Stream<Path> paths = Files.walk(sourceDirPath)) {
-            paths
-                    .filter(path -> !Files.isDirectory(path))
-                    .forEach(path -> {
-                        ZipEntry zipEntry = new ZipEntry(sourceDirPath.relativize(path).toString());
-                        try {
-                            zipOutputStream.putNextEntry(zipEntry);
-                            Files.copy(path, zipOutputStream);
-                            zipOutputStream.closeEntry();
-                        } catch (IOException e) {
-                            System.err.println(e);
-                        }
-                    });
+             Stream<Path> paths = Files.walk(sourceDirPath))
+        {
+            paths.filter(path -> !Files.isDirectory(path)).forEach(path -> {
+                ZipEntry zipEntry = new ZipEntry(sourceDirPath.relativize(path).toString());
+
+                try {
+                    zipOutputStream.putNextEntry(zipEntry);
+                    Files.copy(path, zipOutputStream);
+                    zipOutputStream.closeEntry();
+                }
+                catch (IOException e) {
+                    System.err.println(e); // TODO: Promote to custom exception
+                }
+            });
         }
 
         System.out.println("Zip is created at : "+zipFile);
