@@ -1,6 +1,5 @@
-package com.sorclab.boxremote.endpoint.rest;
+package com.sorclab.boxremote.disk;
 
-import com.sorclab.boxremote.service.DiskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,22 +11,22 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class DiskController
+public class DiskCtrl
 {
-    private final DiskService diskService;
+    private final DiskSvc diskSvc;
 
     @GetMapping(value = "/disk/space")
     public List<String> getDiskSpace() {
-        return diskService.getDiskSpace();
+        return diskSvc.getDiskSpace();
     }
 
     @GetMapping(value = "/disk/io")
-    public List<String> getDiskIO() {
-        return diskService.getDiskIO();
+    public List<String> getDiskIo() {
+        return diskSvc.getDiskIo();
     }
 
     @GetMapping(value = "/disk/dirstat")
     public List<String> getDirStat(@RequestParam(name = "path") String path) {
-        return diskService.getDirStat(path);
+        return diskSvc.getDirStat(path);
     }
 }

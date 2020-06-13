@@ -1,4 +1,4 @@
-package com.sorclab.boxremote.service;
+package com.sorclab.boxremote.disk;
 
 import com.sorclab.boxremote.util.LinuxUtils;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DiskServiceTest
+public class DiskSvcTest
 {
     @Captor
     private ArgumentCaptor<String[]> argCaptor;
@@ -30,7 +30,7 @@ public class DiskServiceTest
     private LinuxUtils linuxUtils;
 
     @InjectMocks
-    private DiskService diskService;
+    private DiskSvc diskSvc;
 
     @Test
     public void getDiskSpace_Success() throws Exception
@@ -39,7 +39,7 @@ public class DiskServiceTest
         when(linuxUtils.shellExec(any(String[].class))).thenReturn(Collections.emptyList());
 
         // Act
-        diskService.getDiskSpace();
+        diskSvc.getDiskSpace();
 
         // Assert
         verify(linuxUtils, atMostOnce()).shellExec(argCaptor.capture());
@@ -53,7 +53,7 @@ public class DiskServiceTest
     {
         when(linuxUtils.shellExec(any(String[].class))).thenThrow(IOException.class);
 
-        assertThatThrownBy(() -> diskService.getDiskSpace())
+        assertThatThrownBy(() -> diskSvc.getDiskSpace())
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Command failed");
     }
@@ -65,7 +65,7 @@ public class DiskServiceTest
         when(linuxUtils.shellExec(any(String[].class))).thenReturn(Collections.emptyList());
 
         // Act
-        diskService.getDiskIO();
+        diskSvc.getDiskIo();
 
         // Assert
         verify(linuxUtils, atMostOnce()).shellExec(argCaptor.capture());
@@ -77,7 +77,7 @@ public class DiskServiceTest
     {
         when(linuxUtils.shellExec(any(String[].class))).thenThrow(IOException.class);
 
-        assertThatThrownBy(() -> diskService.getDiskIO())
+        assertThatThrownBy(() -> diskSvc.getDiskIo())
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Command failed");
     }
@@ -90,7 +90,7 @@ public class DiskServiceTest
         when(linuxUtils.shellExec(any(String[].class))).thenReturn(Collections.emptyList());
 
         // Act
-        diskService.getDirStat(path);
+        diskSvc.getDirStat(path);
 
         // Assert
         verify(linuxUtils, atMostOnce()).shellExec(argCaptor.capture());
@@ -107,7 +107,7 @@ public class DiskServiceTest
         String path = "/path/to/dir";
         when(linuxUtils.shellExec(any(String[].class))).thenThrow(IOException.class);
 
-        assertThatThrownBy(() -> diskService.getDirStat(path))
+        assertThatThrownBy(() -> diskSvc.getDirStat(path))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Command failed");
     }

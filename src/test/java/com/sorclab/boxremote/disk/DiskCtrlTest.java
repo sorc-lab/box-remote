@@ -1,4 +1,4 @@
-package com.sorclab.boxremote.endpoint.rest;
+package com.sorclab.boxremote.disk;
 
 import com.sorclab.boxremote.util.LinuxUtils;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 // TODO: Replace with MockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DiskControllerTest
+public class DiskCtrlTest
 {
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -58,7 +58,7 @@ public class DiskControllerTest
     }
 
     @Test
-    public void getDiskIO_Returns200() throws IOException
+    public void getDiskIo_Returns200() throws IOException
     {
         // Arrange
         when(linuxUtils.shellExec(any(String[].class))).thenReturn(Collections.emptyList());
@@ -72,7 +72,7 @@ public class DiskControllerTest
     }
 
     @Test
-    public void getDiskIO_CmdFail_Returns500() throws IOException
+    public void getDiskIo_CmdFail_Returns500() throws IOException
     {
         // Arrange
         when(linuxUtils.shellExec(any(String[].class))).thenThrow(IOException.class);
